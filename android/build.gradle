@@ -35,5 +35,8 @@ android {
     dependencies {
         implementation 'com.segment.analytics.android:analytics:4.7.0'
         implementation 'com.segment.analytics.android.integrations:amplitude:+'
+        implementation("com.moengage:moengage-segment-integration:5.0.01") {
+            transitive = true
+        }
     }
 }
