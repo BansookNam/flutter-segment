@@ -14,6 +14,7 @@ import com.segment.analytics.Properties;
 import com.segment.analytics.Traits;
 import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
+import com.segment.analytics.android.integrations.adjust.AdjustIntegration;
 import com.segment.analytics.android.integrations.moengage.MoEngageIntegration;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
@@ -68,6 +69,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
             Boolean trackApplicationLifecycleEvents = bundle.getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
             Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
             Boolean isMoEngageIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_MOENGAGE_INTEGRATION", false);
+            Boolean isAdjustIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_ADJUST_INTEGRATION", false);
             Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
 
             Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
@@ -82,6 +84,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
             if (isAmplitudeIntegrationEnabled) {
                 analyticsBuilder.use(AmplitudeIntegration.FACTORY);
+            }
+
+            if (isAdjustIntegrationEnabled) {
+                analyticsBuilder.use(AdjustIntegration.FACTORY);
             }
 
             if (isMoEngageIntegrationEnabled) {
