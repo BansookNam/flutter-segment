@@ -4,6 +4,7 @@
 #import <Analytics/SEGMiddleware.h>
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 #import <Segment_MoEngage/SEGMoEngageIntegrationFactory.h>
+#import <Segment_Adjust/SEGAdjustIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -16,6 +17,7 @@ static NSDictionary *_appendToContextMiddleware;
     NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
+    BOOL isAdjustIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_ADJUST_INTEGRATION"] boolValue];
     BOOL isMoEngageIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_MOENGAGE_INTEGRATION"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
@@ -31,8 +33,8 @@ static NSDictionary *_appendToContextMiddleware;
       // Avoid overriding the context if there is none to override
       // (see different payload types here: https://github.com/segmentio/analytics-ios/tree/master/Analytics/Classes/Integrations)
       if (![context.payload isKindOfClass:[SEGTrackPayload class]]
-        && ![context.payload isKindOfClass:[SEGScreenPayload class]]
         && ![context.payload isKindOfClass:[SEGGroupPayload class]]
+        && ![context.payload isKindOfClass:[SEGScreenPayload class]]
         && ![context.payload isKindOfClass:[SEGIdentifyPayload class]]) {
         next(context);
         return;
@@ -68,19 +70,19 @@ static NSDictionary *_appendToContextMiddleware;
                 context: combinedContext
                 integrations: ((SEGTrackPayload*)ctx.payload).integrations
               ];
-            } else if ([ctx.payload isKindOfClass:[SEGScreenPayload class]]) {
-              ctx.payload = [[SEGScreenPayload alloc]
-                initWithName: ((SEGScreenPayload*)ctx.payload).name
-                properties: ((SEGScreenPayload*)ctx.payload).properties
-                context: combinedContext
-                integrations: ((SEGScreenPayload*)ctx.payload).integrations
-              ];
             } else if ([ctx.payload isKindOfClass:[SEGGroupPayload class]]) {
               ctx.payload = [[SEGGroupPayload alloc]
                 initWithGroupId: ((SEGGroupPayload*)ctx.payload).groupId
                 traits: ((SEGGroupPayload*)ctx.payload).traits
                 context: combinedContext
                 integrations: ((SEGGroupPayload*)ctx.payload).integrations
+              ];
+            } else if ([ctx.payload isKindOfClass:[SEGScreenPayload class]]) {
+              ctx.payload = [[SEGScreenPayload alloc]
+                initWithName: ((SEGScreenPayload*)ctx.payload).name
+                properties: ((SEGScreenPayload*)ctx.payload).properties
+                context: combinedContext
+                integrations: ((SEGScreenPayload*)ctx.payload).integrations
               ];
             } else if ([ctx.payload isKindOfClass:[SEGIdentifyPayload class]]) {
               ctx.payload = [[SEGIdentifyPayload alloc]
@@ -110,6 +112,9 @@ static NSDictionary *_appendToContextMiddleware;
     }
     if (isMoEngageIntegrationEnabled) {
       [configuration use:[SEGMoEngageIntegrationFactory instance]];
+    }
+    if (isAdjustIntegrationEnabled) {
+      [configuration use:[SEGAdjustIntegrationFactory instance]];
     }
 
     [SEGAnalytics setupWithConfiguration:configuration];
