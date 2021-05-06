@@ -16,7 +16,7 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'Analytics'
-  s.dependency 'Segment-Amplitude', '3.0.1'
+  s.dependency 'Segment-Amplitude', '3.2.4'
   s.dependency 'Segment-Adjust'
   s.dependency 'Segment-MoEngage', '5.0.0'
 

@@ -101,6 +101,13 @@ static NSDictionary *_appendToContextMiddleware;
       );
     };
 
+    configuration.enableAdvertisingTracking = YES;
+    // Set the block to be called when the advertisingID is needed
+    // NOTE: In iOS 14, you'll need to manually do authorization elsewhere and only when it has been authorized, return the advertisingIdentifier to segment via the block below
+    // configuration.adSupportBlock = ^{
+    //     return [[ASIdentifierManager sharedManager] advertisingIdentifier];
+    // }
+
     configuration.middlewares = @[
       [[SEGBlockMiddleware alloc] initWithBlock:contextMiddleware]
     ];
