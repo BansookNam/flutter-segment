@@ -5,6 +5,7 @@
 #import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 #import <Segment_MoEngage/SEGMoEngageIntegrationFactory.h>
 #import <Segment_Adjust/SEGAdjustIntegrationFactory.h>
+#import <Segment_Mixpanel/SEGMixpanelIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -19,6 +20,7 @@ static NSDictionary *_appendToContextMiddleware;
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
     BOOL isAdjustIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_ADJUST_INTEGRATION"] boolValue];
     BOOL isMoEngageIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_MOENGAGE_INTEGRATION"] boolValue];
+    BOOL isMixpanelIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_MIXPANEL_INTEGRATION"] boolValue];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
 
     // This middleware is responsible for manipulating only the context part of the request,
@@ -122,6 +124,9 @@ static NSDictionary *_appendToContextMiddleware;
     }
     if (isAdjustIntegrationEnabled) {
       [configuration use:[SEGAdjustIntegrationFactory instance]];
+    }
+    if (isMixpanelIntegrationEnabled) {
+      [configuration use:[SEGMixpanelIntegrationFactory instance]];
     }
 
     [SEGAnalytics setupWithConfiguration:configuration];

@@ -19,6 +19,7 @@ A new flutter plugin project.
   s.dependency 'Segment-Amplitude', '3.2.4'
   s.dependency 'Segment-Adjust'
   s.dependency 'Segment-MoEngage', '5.0.0'
+  s.dependency 'Segment-Mixpanel', '1.7.0'
 
 end
 

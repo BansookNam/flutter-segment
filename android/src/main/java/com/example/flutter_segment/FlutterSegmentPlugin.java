@@ -16,6 +16,7 @@ import com.segment.analytics.Options;
 import com.segment.analytics.Middleware;
 import com.segment.analytics.android.integrations.adjust.AdjustIntegration;
 import com.segment.analytics.android.integrations.moengage.MoEngageIntegration;
+import com.segment.analytics.android.integrations.mixpanel.MixpanelIntegration;
 import com.segment.analytics.integrations.BasePayload;
 import com.segment.analytics.android.integrations.amplitude.AmplitudeIntegration;
 
@@ -70,6 +71,7 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
             Boolean isAmplitudeIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
             Boolean isMoEngageIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_MOENGAGE_INTEGRATION", false);
             Boolean isAdjustIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_ADJUST_INTEGRATION", false);
+            Boolean isMixPanelIntegrationEnabled = bundle.getBoolean("com.claimsforce.segment.ENABLE_MIXPANEL_INTEGRATION", false);
             Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
 
             Analytics.Builder analyticsBuilder = new Analytics.Builder(applicationContext, writeKey);
@@ -92,6 +94,10 @@ public class FlutterSegmentPlugin implements MethodCallHandler, FlutterPlugin {
 
             if (isMoEngageIntegrationEnabled) {
                 analyticsBuilder.use(MoEngageIntegration.FACTORY);
+            }
+
+            if (isMixPanelIntegrationEnabled) {
+                analyticsBuilder.use(MixpanelIntegration.FACTORY);
             }
 
             // Here we build a middleware that just appends data to the current context
